@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Metascript - Frontline Man</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .step {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .step.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .step-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .step-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .timer {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        
+        .question {
+            background: #f7f9fc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 120px;
+            transition: all 0.3s ease;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+        
+        .key-indicator {
+            display: inline-block;
+            padding: 5px 12px;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .summary {
+            background: #f9f9f9;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        
+        .summary h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .summary-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+        
+        .summary-label {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .summary-text {
+            color: #555;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Daily Metascript</h1>
+        <div class="subtitle" id="currentTime"></div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+        </div>
+        
+        <!-- Step 1: Scan -->
+        <div class="step active" id="step1">
+            <div class="step-header">
+                <span class="step-title">Metascript Scan</span>
+                <span class="timer">1-2 min</span>
+            </div>
+            
+            <div class="question">
+                Is er iets gebeurd vandaag dat aandacht nodig heeft?
+            </div>
+            <textarea id="scan1" placeholder="Schrijf hier wat er speelt..."></textarea>
+            
+            <div class="question">
+                Is er iets dat nu speelt waar je over wilt schrijven?
+            </div>
+            <textarea id="scan2" placeholder="Wat houdt je nu bezig..."></textarea>
+            
+            <div class="question">
+                Is er iets dat je verwacht/waar je tegenop ziet?
+            </div>
+            <textarea id="scan3" placeholder="Kijk vooruit..."></textarea>
+            
+            <div class="buttons">
+                <button class="btn-primary" onclick="nextStep(1)">Volgende: Heart Shift →</button>
+            </div>
+        </div>
+        
+        <!-- Step 2: Heart Shift -->
+        <div class="step" id="step2">
+            <div class="step-header">
+                <span class="step-title">Wat wil ik? - Heart Shift <span class="key-indicator">WAARDIGHEID</span></span>
+                <span class="timer">2-3 min</span>
+            </div>
+            
+            <div class="question">
+                Kijk dieper... Wat wil je ECHT in deze situatie? Wat is je diepere verlangen?
+            </div>
+            <textarea id="heartShift" placeholder="Verbind met je hart. Wat voel je? Wat verlang je echt? Behandel jezelf met mededogen..."></textarea>
+            
+            <div class="buttons">
+                <button class="btn-secondary" onclick="previousStep(2)">← Terug</button>
+                <button class="btn-primary" onclick="nextStep(2)">Volgende: Head Shift →</button>
+            </div>
+        </div>
+        
+        <!-- Step 3: Head Shift -->
+        <div class="step" id="step3">
+            <div class="step-header">
+                <span class="step-title">Hoe kan ik winnen? - Head Shift <span class="key-indicator">RESONANTIE</span></span>
+                <span class="timer">2-3 min</span>
+            </div>
+            
+            <div class="question">
+                Welke opties heb je? Genereer minstens 3 mogelijke paden om te krijgen wat je echt wilt.
+            </div>
+            <textarea id="headShift1" placeholder="Optie 1: ...
+Optie 2: ...
+Optie 3: ..."></textarea>
+            
+            <div class="question">
+                Welke optie resoneert het meest? Waarom?
+            </div>
+            <textarea id="headShift2" placeholder="De optie die zowel mijn hoofd als hart aanspreekt is..."></textarea>
+            
+            <div class="buttons">
+                <button class="btn-secondary" onclick="previousStep(3)">← Terug</button>
+                <button class="btn-primary" onclick="nextStep(3)">Volgende: Hat Shift →</button>
+            </div>
+        </div>
+        
+        <!-- Step 4: Hat Shift -->
+        <div class="step" id="step4">
+            <div class="step-header">
+                <span class="step-title">Wie wil ik zijn? - Hat Shift <span class="key-indicator">INTEGRATIE</span></span>
+                <span class="timer">2-3 min</span>
+            </div>
+            
+            <div class="question">
+                Stel je de versie van jezelf voor die dit pad al succesvol heeft bewandeld. Wie is hij? Geef hem een naam of beschrijving.
+            </div>
+            <textarea id="hatShift1" placeholder="De man die dit voor elkaar krijgt is... (bijv. 'De Gedisciplineerde Professional', 'De Liefdevolle Leider', etc.)"></textarea>
+            
+            <div class="question">
+                Wat zou deze versie van jou tegen je zeggen? Welk advies geeft hij? Wat vindt hij leuk aan dit pad?
+            </div>
+            <textarea id="hatShift2" placeholder="Hij zou zeggen... Hij geniet van... Zijn perspectief is..."></textarea>
+            
+            <div class="buttons">
+                <button class="btn-secondary" onclick="previousStep(4)">← Terug</button>
+                <button class="btn-primary" onclick="nextStep(4)">Volgende: Integratie →</button>
+            </div>
+        </div>
+        
+        <!-- Step 5: Integration -->
+        <div class="step" id="step5">
+            <div class="step-header">
+                <span class="step-title">Integratie & Actie</span>
+                <span class="timer">1-2 min</span>
+            </div>
+            
+            <div class="question">
+                Wat is je concrete actie voor vandaag/morgen?
+            </div>
+            <textarea id="integration1" placeholder="Mijn eerste stap is..."></textarea>
+            
+            <div class="question">
+                Hoe ga je deze nieuwe versie van jezelf vandaag belichamen?
+            </div>
+            <textarea id="integration2" placeholder="Ik ga vandaag..."></textarea>
+            
+            <div class="buttons">
+                <button class="btn-secondary" onclick="previousStep(5)">← Terug</button>
+                <button class="btn-primary" onclick="completeMeta script()">Afronden & Samenvatting →</button>
+            </div>
+        </div>
+        
+        <!-- Summary -->
+        <div class="step" id="summary">
+            <div class="step-header">
+                <span class="step-title">Metascript Compleet! 🎯</span>
+            </div>
+            
+            <div class="summary">
+                <h3>Jouw Metascript Samenvatting</h3>
+                <div id="summaryContent"></div>
+            </div>
+            
+            <div class="buttons">
+                <button class="btn-secondary" onclick="resetMetascript()">Nieuwe Metascript</button>
+                <button class="btn-primary" onclick="saveMetascript()">Opslaan</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentStep = 1;
+        const totalSteps = 5;
+        let startTime = Date.now();
+        
+        // Update current time
+        function updateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            document.getElementById('currentTime').textContent = now.toLocaleDateString('nl-NL', options);
+        }
+        updateTime();
+        setInterval(updateTime, 60000);
+        
+        function updateProgress() {
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+        
+        function nextStep(step) {
+            document.getElementById('step' + step).classList.remove('active');
+            currentStep = step + 1;
+            
+            if (currentStep <= totalSteps) {
+                setTimeout(() => {
+                    document.getElementById('step' + currentStep).classList.add('active');
+                    updateProgress();
+                }, 100);
+            }
+        }
+        
+        function previousStep(step) {
+            document.getElementById('step' + step).classList.remove('active');
+            currentStep = step - 1;
+            
+            setTimeout(() => {
+                document.getElementById('step' + currentStep).classList.add('active');
+                updateProgress();
+            }, 100);
+        }
+        
+        function completeMetascript() {
+            const duration = Math.round((Date.now() - startTime) / 60000);
+            
+            // Gather all responses
+            const summary = {
+                scan: [
+                    document.getElementById('scan1').value,
+                    document.getElementById('scan2').value,
+                    document.getElementById('scan3').value
+                ].filter(v => v).join(' '),
+                heartShift: document.getElementById('heartShift').value,
+                headShift: {
+                    options: document.getElementById('headShift1').value,
+                    resonant: document.getElementById('headShift2').value
+                },
+                hatShift: {
+                    identity: document.getElementById('hatShift1').value,
+                    wisdom: document.getElementById('hatShift2').value
+                },
+                integration: {
+                    action: document.getElementById('integration1').value,
+                    embodiment: document.getElementById('integration2').value
+                },
+                duration: duration
+            };
+            
+            // Display summary
+            let summaryHTML = `
+                <div class="summary-item">
+                    <div class="summary-label">⏱️ Tijdsduur</div>
+                    <div class="summary-text">${duration} minuten</div>
+                </div>
+                
+                <div class="summary-item">
+                    <div class="summary-label">❤️ Wat ik wil (Heart Shift)</div>
+                    <div class="summary-text">${summary.heartShift || 'Niet ingevuld'}</div>
+                </div>
+                
+                <div class="summary-item">
+                    <div class="summary-label">🧠 Hoe ik kan winnen (Head Shift)</div>
+                    <div class="summary-text">${summary.headShift.resonant || 'Niet ingevuld'}</div>
+                </div>
+                
+                <div class="summary-item">
+                    <div class="summary-label">👑 Wie ik wil zijn (Hat Shift)</div>
+                    <div class="summary-text">${summary.hatShift.identity || 'Niet ingevuld'}</div>
+                </div>
+                
+                <div class="summary-item">
+                    <div class="summary-label">🎯 Mijn actie</div>
+                    <div class="summary-text">${summary.integration.action || 'Niet ingevuld'}</div>
+                </div>
+            `;
+            
+            document.getElementById('summaryContent').innerHTML = summaryHTML;
+            
+            // Show summary
+            document.getElementById('step5').classList.remove('active');
+            setTimeout(() => {
+                document.getElementById('summary').classList.add('active');
+            }, 100);
+        }
+        
+        function resetMetascript() {
+            // Clear all textareas
+            const textareas = document.querySelectorAll('textarea');
+            textareas.forEach(textarea => textarea.value = '');
+            
+            // Reset to step 1
+            document.getElementById('summary').classList.remove('active');
+            currentStep = 1;
+            startTime = Date.now();
+            
+            setTimeout(() => {
+                document.getElementById('step1').classList.add('active');
+                updateProgress();
+            }, 100);
+        }
+        
+        function saveMetascript() {
+            // In een echte app zou dit naar een database gaan
+            const data = {
+                date: new Date().toISOString(),
+                scan1: document.getElementById('scan1').value,
+                scan2: document.getElementById('scan2').value,
+                scan3: document.getElementById('scan3').value,
+                heartShift: document.getElementById('heartShift').value,
+                headShift1: document.getElementById('headShift1').value,
+                headShift2: document.getElementById('headShift2').value,
+                hatShift1: document.getElementById('hatShift1').value,
+                hatShift2: document.getElementById('hatShift2').value,
+                integration1: document.getElementById('integration1').value,
+                integration2: document.getElementById('integration2').value
+            };
+            
+            // Voor nu slaan we op in localStorage
+            const metascripts = JSON.parse(localStorage.getItem('metascripts') || '[]');
+            metascripts.push(data);
+            localStorage.setItem('metascripts', JSON.stringify(metascripts));
+            
+            alert('Metascript opgeslagen! 💪');
+        }
+        
+        updateProgress();
+    </script>
+</body>
+</html>

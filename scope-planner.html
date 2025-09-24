@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCOPE Planner - Frontline Man</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        
+        .scope-levels {
+            display: grid;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .scope-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.6s ease-out;
+            animation-fill-mode: both;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .scope-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #f093fb, #f5576c);
+        }
+        
+        .scope-card:nth-child(1) { animation-delay: 0.1s; }
+        .scope-card:nth-child(2) { animation-delay: 0.2s; }
+        .scope-card:nth-child(3) { animation-delay: 0.3s; }
+        .scope-card:nth-child(4) { animation-delay: 0.4s; }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e6ed;
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #f093fb;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(240, 147, 251, 0.1);
+        }
+        
+        .apex-vision textarea {
+            min-height: 150px;
+            background: linear-gradient(135deg, rgba(240, 147, 251, 0.05), rgba(245, 87, 108, 0.05));
+        }
+        
+        .goals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .goal-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .goal-item:hover {
+            border-color: #f093fb;
+            transform: translateY(-2px);
+        }
+        
+        .goal-item input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            padding: 5px;
+        }
+        
+        .goal-item input:focus {
+            outline: none;
+        }
+        
+        .priority-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .priority-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .priority-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .priority-number {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .priority-item input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            padding: 5px;
+        }
+        
+        .priority-item input:focus {
+            outline: none;
+        }
+        
+        .resonance-check {
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(240, 147, 251, 0.1), rgba(245, 87, 108, 0.1));
+            border-radius: 15px;
+        }
+        
+        .resonance-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .resonance-slider {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .slider {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 8px;
+            border-radius: 5px;
+            background: linear-gradient(90deg, #ff6b6b 0%, #ffd93d 50%, #6bcf7f 100%);
+            outline: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            border: none;
+        }
+        
+        .resonance-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .resonance-feedback {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            font-style: italic;
+            color: #555;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+        
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-save {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+        }
+        
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(240, 147, 251, 0.3);
+        }
+        
+        .btn-reset {
+            background: #e0e6ed;
+            color: #2c3e50;
+        }
+        
+        .btn-reset:hover {
+            background: #d0d6dd;
+        }
+        
+        .time-blocks {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .time-block {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .time-block:hover {
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .time-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .time-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            text-align: center;
+            font-size: 14px;
+            padding: 5px;
+        }
+        
+        .time-input:focus {
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>SCOPE Planner</h1>
+            <div class="subtitle">Van Apex Vision naar Daily Action</div>
+        </div>
+        
+        <div class="scope-levels">
+            <!-- Apex Vision -->
+            <div class="scope-card apex-vision">
+                <div class="card-header">
+                    <div class="card-title">🏔️ Apex Vision</div>
+                    <div class="card-icon">🎯</div>
+                </div>
+                <textarea id="apexVision" placeholder="Beschrijf je ultieme visie... Wie ben je op je absolute beste? Wat heb je bereikt? Hoe voel je je? Wat is je impact op de wereld?"></textarea>
+                
+                <div class="resonance-check">
+                    <div class="resonance-title">Resonantie Check</div>
+                    <div class="resonance-slider">
+                        <span>😔</span>
+                        <input type="range" class="slider" id="apexResonance" min="1" max="10" value="5">
+                        <span>🔥</span>
+                        <span class="resonance-value" id="apexResonanceValue">5</span>
+                    </div>
+                    <div class="resonance-feedback" id="apexFeedback">Voelt deze visie als JOUW visie?</div>
+                </div>
+            </div>
+            
+            <!-- Quarterly Goals -->
+            <div class="scope-card">
+                <div class="card-header">
+                    <div class="card-title">📅 Kwartaal Doelen</div>
+                    <div class="card-icon">Q1</div>
+                </div>
+                <div class="goals-grid">
+                    <div class="goal-item">
+                        <input type="text" placeholder="🎯 Business/Carrière doel..." id="goal1">
+                    </div>
+                    <div class="goal-item">
+                        <input type="text" placeholder="💪 Gezondheid/Fitness doel..." id="goal2">
+                    </div>
+                    <div class="goal-item">
+                        <input type="text" placeholder="❤️ Relatie/Sociaal doel..." id="goal3">
+                    </div>
+                    <div class="goal-item">
+                        <input type="text" placeholder="🧠 Persoonlijke groei doel..." id="goal4">
+                    </div>
+                </div>
+                
+                <div class="resonance-check">
+                    <div class="resonance-title">Hoe aligned voelen deze doelen met je Apex Vision?</div>
+                    <div class="resonance-slider">
+                        <span>🤔</span>
+                        <input type="range" class="slider" id="quarterResonance" min="1" max="10" value="5">
+                        <span>💯</span>
+                        <span class="resonance-value" id="quarterResonanceValue">5</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Weekly Planning -->
+            <div class="scope-card">
+                <div class="card-header">
+                    <div class="card-title">📆 Week Planning</div>
+                    <div class="card-icon">W</div>
+                </div>
+                <div class="priority-list">
+                    <div class="priority-item">
+                        <div class="priority-number">1</div>
+                        <input type="text" placeholder="Belangrijkste prioriteit deze week..." id="weekPrio1">
+                    </div>
+                    <div class="priority-item">
+                        <div class="priority-number">2</div>
+                        <input type="text" placeholder="Tweede prioriteit..." id="weekPrio2">
+                    </div>
+                    <div class="priority-item">
+                        <div class="priority-number">3</div>
+                        <input type="text" placeholder="Derde prioriteit..." id="weekPrio3">
+                    </div>
+                </div>
+                
+                <div class="time-blocks">
+                    <div class="time-block">
+                        <div class="time-label">Deep Work</div>
+                        <input type="text" class="time-input" placeholder="8 uur" id="timeDeep">
+                    </div>
+                    <div class="time-block">
+                        <div class="time-label">Meetings</div>
+                        <input type="text" class="time-input" placeholder="4 uur" id="timeMeetings">
+                    </div>
+                    <div class="time-block">
+                        <div class="time-label">Sport/Beweging</div>
+                        <input type="text" class="time-input" placeholder="5 uur" id="timeSport">
+                    </div>
+                    <div class="time-block">
+                        <div class="time-label">Fun/Ontspanning</div>
+                        <input type="text" class="time-input" placeholder="10 uur" id="timeFun">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Daily Focus -->
+            <div class="scope-card">
+                <div class="card-header">
+                    <div class="card-title">☀️ Vandaag's Focus</div>
+                    <div class="card-icon">📍</div>
+                </div>
+                <div class="priority-list">
+                    <div class="priority-item">
+                        <div class="priority-number">🌟</div>
+                        <input type="text" id="dailyMain" placeholder="De ENIGE taak die echt moet gebeuren...">
+                    </div>
+                    <div class="priority-item">
+                        <div class="priority-number">⚡</div>
+                        <input type="text" id="dailyQuick" placeholder="Quick win voor momentum...">
+                    </div>
+                    <div class="priority-item">
+                        <div class="priority-number">🎁</div>
+                        <input type="text" id="dailyFun" placeholder="Iets leuks voor mezelf...">
+                    </div>
+                </div>
+                
+                <div class="resonance-check">
+                    <div class="resonance-title">Energie niveau voor vandaag</div>
+                    <div class="resonance-slider">
+                        <span>😴</span>
+                        <input type="range" class="slider" id="dailyEnergy" min="1" max="10" value="7">
+                        <span>⚡</span>
+                        <span class="resonance-value" id="dailyEnergyValue">7</span>
+                    </div>
+                    <div class="resonance-feedback" id="dailyFeedback">Plan aangepast aan je energie niveau?</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="btn-reset" onclick="resetScope()">Reset</button>
+            <button class="btn-save" onclick="saveScope()">💾 Opslaan SCOPE</button>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavedScope();
+            
+            // Setup all event listeners
+            setupResonanceSliders();
+        });
+        
+        function setupResonanceSliders() {
+            // Apex Resonance slider
+            const apexSlider = document.getElementById('apexResonance');
+            if (apexSlider) {
+                apexSlider.addEventListener('input', function(e) {
+                    const value = e.target.value;
+                    document.getElementById('apexResonanceValue').textContent = value;
+                    
+                    const feedback = document.getElementById('apexFeedback');
+                    if (value <= 3) {
+                        feedback.textContent = "Deze visie voelt niet als de jouwe. Wat mist er?";
+                    } else if (value <= 6) {
+                        feedback.textContent = "Er is iets, maar het resoneert nog niet volledig. Verfijn het.";
+                    } else if (value <= 8) {
+                        feedback.textContent = "Dit begint te voelen als jouw pad! Maak het nog specifieker.";
+                    } else {
+                        feedback.textContent = "JA! Dit is het. Dit is wie je wilt zijn! 🔥";
+                    }
+                });
+            }
+            
+            // Quarter Resonance slider
+            const quarterSlider = document.getElementById('quarterResonance');
+            if (quarterSlider) {
+                quarterSlider.addEventListener('input', function(e) {
+                    document.getElementById('quarterResonanceValue').textContent = e.target.value;
+                });
+            }
+            
+            // Daily Energy slider
+            const dailySlider = document.getElementById('dailyEnergy');
+            if (dailySlider) {
+                dailySlider.addEventListener('input', function(e) {
+                    const value = e.target.value;
+                    document.getElementById('dailyEnergyValue').textContent = value;
+                    
+                    const feedback = document.getElementById('dailyFeedback');
+                    if (value <= 3) {
+                        feedback.textContent = "Lage energie: Focus op één ding. Wees mild voor jezelf.";
+                    } else if (value <= 6) {
+                        feedback.textContent = "Gemiddelde energie: 2-3 taken zijn haalbaar vandaag.";
+                    } else if (value <= 8) {
+                        feedback.textContent = "Goede energie! Je kunt vandaag impact maken.";
+                    } else {
+                        feedback.textContent = "Top energie! Tijd om te knallen! 💪";
+                    }
+                });
+            }
+        }
+        
+        function saveScope() {
+            const scopeData = {
+                date: new Date().toISOString(),
+                apexVision: document.getElementById('apexVision').value,
+                apexResonance: document.getElementById('apexResonance').value,
+                quarterlyGoals: [
+                    document.getElementById('goal1').value,
+                    document.getElementById('goal2').value,
+                    document.getElementById('goal3').value,
+                    document.getElementById('goal4').value
+                ],
+                weekPriorities: [
+                    document.getElementById('weekPrio1').value,
+                    document.getElementById('weekPrio2').value,
+                    document.getElementById('weekPrio3').value
+                ],
+                timeBlocks: {
+                    deepWork: document.getElementById('timeDeep').value,
+                    meetings: document.getElementById('timeMeetings').value,
+                    sport: document.getElementById('timeSport').value,
+                    fun: document.getElementById('timeFun').value
+                },
+                dailyFocus: {
+                    main: document.getElementById('dailyMain').value,
+                    quick: document.getElementById('dailyQuick').value,
+                    fun: document.getElementById('dailyFun').value
+                },
+                dailyEnergy: document.getElementById('dailyEnergy').value
+            };
+            
+            // Save to localStorage
+            try {
+                const scopes = JSON.parse(localStorage.getItem('scopes') || '[]');
+                scopes.push(scopeData);
+                localStorage.setItem('scopes', JSON.stringify(scopes));
+                localStorage.setItem('currentScope', JSON.stringify(scopeData));
+                
+                alert('SCOPE opgeslagen! Je bent op weg naar je Apex Vision! 🏔️');
+            } catch (error) {
+                console.error('Error saving scope:', error);
+                alert('Er ging iets mis bij het opslaan. Probeer het opnieuw.');
+            }
+        }
+        
+        function resetScope() {
+            if (confirm('Weet je zeker dat je alles wilt resetten?')) {
+                // Clear all inputs
+                document.getElementById('apexVision').value = '';
+                document.getElementById('goal1').value = '';
+                document.getElementById('goal2').value = '';
+                document.getElementById('goal3').value = '';
+                document.getElementById('goal4').value = '';
+                document.getElementById('weekPrio1').value = '';
+                document.getElementById('weekPrio2').value = '';
+                document.getElementById('weekPrio3').value = '';
+                document.getElementById('timeDeep').value = '';
+                document.getElementById('timeMeetings').value = '';
+                document.getElementById('timeSport').value = '';
+                document.getElementById('timeFun').value = '';
+                document.getElementById('dailyMain').value = '';
+                document.getElementById('dailyQuick').value = '';
+                document.getElementById('dailyFun').value = '';
+                
+                // Reset sliders
+                document.getElementById('apexResonance').value = 5;
+                document.getElementById('apexResonanceValue').textContent = '5';
+                document.getElementById('quarterResonance').value = 5;
+                document.getElementById('quarterResonanceValue').textContent = '5';
+                document.getElementById('dailyEnergy').value = 7;
+                document.getElementById('dailyEnergyValue').textContent = '7';
+                
+                // Reset feedback
+                document.getElementById('apexFeedback').textContent = 'Voelt deze visie als JOUW visie?';
+                document.getElementById('dailyFeedback').textContent = 'Plan aangepast aan je energie niveau?';
+            }
+        }
+        
+        function loadSavedScope() {
+            try {
+                const currentScope = localStorage.getItem('currentScope');
+                if (currentScope) {
+                    const data = JSON.parse(currentScope);
+                    
+                    // Load saved values
+                    document.getElementById('apexVision').value = data.apexVision || '';
+                    
+                    if (data.quarterlyGoals) {
+                        document.getElementById('goal1').value = data.quarterlyGoals[0] || '';
+                        document.getElementById('goal2').value = data.quarterlyGoals[1] || '';
+                        document.getElementById('goal3').value = data.quarterlyGoals[2] || '';
+                        document.getElementById('goal4').value = data.quarterlyGoals[3] || '';
+                    }
+                    
+                    if (data.weekPriorities) {
+                        document.getElementById('weekPrio1').value = data.weekPriorities[0] || '';
+                        document.getElementById('weekPrio2').value = data.weekPriorities[1] || '';
+                        document.getElementById('weekPrio3').value = data.weekPriorities[2] || '';
+                    }
+                    
+                    if (data.timeBlocks) {
+                        document.getElementById('timeDeep').value = data.timeBlocks.deepWork || '';
+                        document.getElementById('timeMeetings').value = data.timeBlocks.meetings || '';
+                        document.getElementById('timeSport').value = data.timeBlocks.sport || '';
+                        document.getElementById('timeFun').value = data.timeBlocks.fun || '';
+                    }
+                    
+                    if (data.dailyFocus) {
+                        document.getElementById('dailyMain').value = data.dailyFocus.main || '';
+                        document.getElementById('dailyQuick').value = data.dailyFocus.quick || '';
+                        document.getElementById('dailyFun').value = data.dailyFocus.fun || '';
+                    }
+                    
+                    // Load resonance values
+                    if (data.apexResonance) {
+                        document.getElementById('apexResonance').value = data.apexResonance;
+                        document.getElementById('apexResonanceValue').textContent = data.apexResonance;
+                    }
+                    
+                    if (data.dailyEnergy) {
+                        document.getElementById('dailyEnergy').value = data.dailyEnergy;
+                        document.getElementById('dailyEnergyValue').textContent = data.dailyEnergy;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading saved scope:', error);
+            }
+        }
+    </script>
+</body>
+</html>

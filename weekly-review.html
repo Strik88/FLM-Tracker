@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Command Center - Frontline Man</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #141e30, #243b55);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #667eea;
+            }
+            to {
+                text-shadow: 0 0 20px #fff, 0 0 30px #667eea, 0 0 40px #667eea;
+            }
+        }
+        
+        h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+        
+        .week-info {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        
+        .review-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            animation: slideIn 0.5s ease-out;
+            animation-fill-mode: both;
+        }
+        
+        .review-section:nth-child(2) { animation-delay: 0.1s; }
+        .review-section:nth-child(3) { animation-delay: 0.2s; }
+        .review-section:nth-child(4) { animation-delay: 0.3s; }
+        .review-section:nth-child(5) { animation-delay: 0.4s; }
+        .review-section:nth-child(6) { animation-delay: 0.5s; }
+        .review-section:nth-child(7) { animation-delay: 0.6s; }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .section-title {
+            flex: 1;
+        }
+        
+        .section-title h2 {
+            font-size: 22px;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .section-subtitle {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .question-group {
+            margin-bottom: 20px;
+        }
+        
+        .question {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e6ed;
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 80px;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .wins-grid {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .win-item {
+            display: flex;
+            gap: 15px;
+            align-items: start;
+        }
+        
+        .win-number {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #333;
+            flex-shrink: 0;
+        }
+        
+        .priority-grid {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .priority-item {
+            display: flex;
+            gap: 15px;
+            align-items: start;
+        }
+        
+        .priority-badge {
+            padding: 8px 15px;
+            background: linear-gradient(135deg, #ff6b6b, #ff8787);
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .stack-check {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .stack-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .stack-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stack-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .stack-status {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .resonance-meter {
+            margin-top: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border-radius: 15px;
+        }
+        
+        .resonance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .resonance-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .resonance-value {
+            font-size: 32px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .resonance-slider {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 10px;
+            border-radius: 5px;
+            background: linear-gradient(90deg, #ff6b6b 0%, #ffd93d 50%, #6bcf7f 100%);
+            outline: none;
+        }
+        
+        .resonance-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+            justify-content: center;
+        }
+        
+        button {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-save {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-export {
+            background: linear-gradient(135deg, #4ecdc4, #44a6a0);
+            color: white;
+        }
+        
+        .btn-export:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(78, 205, 196, 0.3);
+        }
+        
+        .maxian-chat {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 20px rgba(102, 126, 234, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
+            }
+        }
+        
+        .maxian-chat:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Weekly Command Center</h1>
+            <div class="week-info" id="weekInfo"></div>
+        </div>
+        
+        <!-- Wins van de Week -->
+        <div class="review-section">
+            <div class="section-header">
+                <div class="section-icon">🏆</div>
+                <div class="section-title">
+                    <h2>Wins van de Week</h2>
+                    <div class="section-subtitle">Celebrate your victories</div>
+                </div>
+            </div>
+            
+            <div class="wins-grid">
+                <div class="win-item">
+                    <div class="win-number">1</div>
+                    <textarea placeholder="Welke voortgang heb ik deze week gemaakt waar ik trots op ben?"></textarea>
+                </div>
+                <div class="win-item">
+                    <div class="win-number">2</div>
+                    <textarea placeholder="Welke obstakels heb ik overwonnen die ik voorheen moeilijk vond?"></textarea>
+                </div>
+                <div class="win-item">
+                    <div class="win-number">3</div>
+                    <textarea placeholder="Waar heb ik gezien dat ik meer in lijn met mijn APEX visie leef?"></textarea>
+                </div>
+            </div>
+        </div>
+        
+        <!-- APEX Vision Focus -->
+        <div class="review-section">
+            <div class="section-header">
+                <div class="section-icon">🏔️</div>
+                <div class="section-title">
+                    <h2>APEX Vision Focus</h2>
+                    <div class="section-subtitle">Blijf verbonden met je hoogste potentieel</div>
+                </div>
+            </div>
+            
+            <div class="question-group">
+                <div class="question">Welk aspect van mijn APEX visie verdient deze week extra aandacht?</div>
+                <textarea placeholder="Focus op..."></textarea>
+            </div>
+            
+            <div class="question-group">
+                <div class="question">Hoe kan ik deze week één stap dichter bij mijn ideale zelf komen?</div>
+                <textarea placeholder="Mijn volgende stap is..."></textarea>
+            </div>
+        </div>
+        
+        <!-- SCOPE voor deze week -->
+        <div class="review-section">
+            <div class="section-header">
+                <div class="section-icon">📋</div>
+                <div class="section-title">
+                    <h2>SCOPE voor deze Week</h2>
+                    <div class="section-subtitle">Crystallize your priorities</div>
+                </div>
+            </div>
+            
+            <div class="priority-grid">
+                <div class="priority-item">
+                    <div class="priority-badge">TOP 1</div>
+                    <textarea placeholder="Belangrijkste prioriteit voor deze week..."></textarea>
+                </div>
+                <div class="priority-item">
+                    <div class="priority-badge">TOP 2</div>
+                    <textarea placeholder="Tweede prioriteit..."></textarea>
+                </div>
+                <div class="priority-item">
+                    <div class="priority-badge">TOP 3</div>
+                    <textarea placeholder="Derde prioriteit..."></textarea>
+                </div>
+            </div>
+            
+            <div class="question-group" style="margin-top: 20px;">
+                <div class="question">Wat moet ik deze week plannen om ook tijd voor plezier en herstel te hebben?</div>
+                <textarea placeholder="Fun & recovery planning..."></textarea>
+            </div>
+        </div>
+        
+        <!-- STACK Evaluatie -->
+        <div class="review-section">
+            <div class="section-header">
+                <div class="section-icon">📊</div>
+                <div class="section-title">
+                    <h2>STACK Evaluatie</h2>
+                    <div class="section-subtitle">Systematic Training & Quantification</div>
+                </div>
+            </div>
+            
+            <div class="stack-check">
+                <div class="stack-item">
+                    <div class="stack-label">Hardline Success</div>
+                    <div class="stack-status">✅</div>
+                    <select style="width: 100%; padding: 5px; border-radius: 5px; border: 1px solid #ddd;">
+                        <option>100% Gehaald</option>
+                        <option>75-99% Gehaald</option>
+                        <option>50-74% Gehaald</option>
+                        <option><50% Gehaald</option>
+                    </select>
+                </div>
+                <div class="stack-item">
+                    <div class="stack-label">Mainline Progress</div>
+                    <div class="stack-status">📈</div>
+                    <select style="width: 100%; padding: 5px; border-radius: 5px; border: 1px solid #ddd;">
+                        <option>Excellent</option>
+                        <option>Good</option>
+                        <option>Fair</option>
+                        <option>Needs Work</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="question-group" style="margin-top: 20px;">
+                <div class="question">Waar moet ik mijn stack aanpassen om het meer resonant te maken?</div>
+                <textarea placeholder="Aanpassingen voor volgende week..."></textarea>
+            </div>
+        </div>
+        
+        <!-- Metascript voor Uitdagingen -->
+        <div class="review-section">
+            <div class="section-header">
+                <div class="section-icon">🔮</div>
+                <div class="section-title">
+                    <h2>Preemptive Metascript</h2>
+                    <div class="section-subtitle">Prepare for next week's challenges</div>
+                </div>
+            </div>
+            
+            <div class="question-group">
+                <div class="question">Welke specifieke uitdaging verwacht ik deze week?</div>
+                <textarea placeholder="De uitdaging is..."></textarea>
+            </div>
+            
+            <div class="question-group">
+                <div class="question">Wat wil ik echt in deze situatie? (Heart Shift)</div>
+                <textarea placeholder="Mijn diepere verlangen is..."></textarea>
+            </div>
+            
+            <div class="question-group">
+                <div class="question">Hoe kan ik hier winnen? (Head Shift)</div>
+                <textarea placeholder="Mijn winnende strategie is..."></textarea>
+            </div>
+            
+            <div class="question-group">
+                <div class="question">Wie wil ik zijn in deze situatie? (Hat Shift)</div>
+                <textarea placeholder="Ik wil optreden als..."></textarea>
+            </div>
+        </div>
+        
+        <!-- Resonantie Check -->
+        <div class="review-section">
+            <div class="section-header">
+                <div class="section-icon">💫</div>
+                <div class="section-title">
+                    <h2>Algemene Resonantie</h2>
+                    <div class="section-subtitle">How aligned does this week feel?</div>
+                </div>
+            </div>
+            
+            <div class="resonance-meter">
+                <div class="resonance-header">
+                    <div class="resonance-title">Tevredenheid met weekplanning</div>
+                    <div class="resonance-value" id="resonanceValue">7</div>
+                </div>
+                <input type="range" class="resonance-slider" id="resonanceSlider" min="1" max="10" value="7">
+            </div>
+            
+            <div class="question-group" style="margin-top: 20px;">
+                <div class="question">Wat ontbreekt er nog om dit plan volledig resonant te maken?</div>
+                <textarea placeholder="Om dit een 10 te maken..."></textarea>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="btn-export" onclick="exportReview()">📄 Exporteer Review</button>
+            <button class="btn-save" onclick="saveReview()">💾 Opslaan & Afronden</button>
+        </div>
+    </div>
+    
+    <!-- MaxIan Chat Button -->
+    <div class="maxian-chat" onclick="openMaxianChat()" title="Chat met MaxIan">
+        👑
+    </div>
+    
+    <script>
+        // Set current week info
+        function setWeekInfo() {
+            const now = new Date();
+            const weekNumber = getWeekNumber(now);
+            const year = now.getFullYear();
+            document.getElementById('weekInfo').textContent = `Week ${weekNumber} - ${year}`;
+        }
+        
+        function getWeekNumber(d) {
+            d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+            d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+            var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+            var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+            return weekNo;
+        }
+        
+        setWeekInfo();
+        
+        // Resonance slider
+        document.getElementById('resonanceSlider').addEventListener('input', function(e) {
+            document.getElementById('resonanceValue').textContent = e.target.value;
+        });
+        
+        function saveReview() {
+            const reviewData = {
+                date: new Date().toISOString(),
+                week: getWeekNumber(new Date()),
+                wins: [],
+                apex: {},
+                scope: [],
+                stack: {},
+                metascript: {},
+                resonance: document.getElementById('resonanceSlider').value
+            };
+            
+            // Collect all textarea values
+            const textareas = document.querySelectorAll('textarea');
+            textareas.forEach((textarea, index) => {
+                if (textarea.value) {
+                    reviewData[`field_${index}`] = textarea.value;
+                }
+            });
+            
+            // Save to localStorage
+            const reviews = JSON.parse(localStorage.getItem('weeklyReviews') || '[]');
+            reviews.push(reviewData);
+            localStorage.setItem('weeklyReviews', JSON.stringify(reviews));
+            
+            alert('Weekly Review opgeslagen! 🎯 Klaar voor een geweldige week!');
+        }
+        
+        function exportReview() {
+            alert('In de volledige app zou dit je review exporteren als PDF of naar Notion! 📄');
+        }
+        
+        function openMaxianChat() {
+            alert('MaxIan: "Hey Ian! Ik zie dat je je weekly review doet. Goed bezig! Onthoud: focus op wat resoneert, niet op wat je denkt dat je zou moeten doen. Wat is je grootste win deze week?" 👑');
+        }
+    </script>
+</body>
+</html>
