@@ -29,19 +29,19 @@ Zie `app/supabase/schema.sql` en voer uit in Supabase → SQL Editor.
 npm run test
 npm run build
 ```
-De build staat in `app/dist`.
+De build staat in `dist`.
 
-## Deploy (Vercel)
-1) `npx vercel` → link project, `dist` als output, rewrites via `vercel.json` aanwezig
-2) Zet env vars (Preview + Production): `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`
-3) `npx vercel --prod`
+## Deploy (Bolt Hosting)
+1) Build het project: `npm run build`
+2) Deploy de `dist` folder naar Bolt Hosting
+3) Zorg dat environment variables zijn ingesteld: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`
 
 ## PWA
 - Manifest: `public/manifest.webmanifest`
 - Service worker: `public/service-worker.js`
 - Installable en basic offline caching (app shell)
 
-## Troubleshooting
-- Auth errors: check `.env` en Vercel env, en Supabase Auth → URL Configuration (site URL = Vercel URL)
+## Troubleshooting  
+- Auth errors: check `.env` en environment variables, en Supabase Auth → URL Configuration (site URL = deployed URL)
 - RLS errors: zorg dat `user_id` wordt meegestuurd (zie repositories voor voorbeelden)
 - Vulnerabilities: `npm audit` (let op: sommige fixes vereisen major upgrades)

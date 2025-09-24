@@ -1,5 +1,5 @@
 const CACHE = 'flm-cache-v1'
-const APP_SHELL = ['/', '/index.html']
+const APP_SHELL = ['./', './index.html']
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(APP_SHELL)))
