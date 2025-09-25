@@ -1,9 +1,9 @@
-const CACHE_NAME = 'flm-cache-v2'
+const CACHE_NAME = 'flm-cache-v3'
 const APP_SHELL = [
-  '/',
-  '/index.html',
-  '/manifest.webmanifest',
-  '/flm-logo.svg'
+  './',
+  './index.html',
+  './manifest.webmanifest',
+  './flm-logo.svg'
 ]
 
 self.addEventListener('install', (event) => {
@@ -63,7 +63,7 @@ self.addEventListener('fetch', (event) => {
           .catch(() => {
             // Fallback to index.html for navigation requests
             if (event.request.mode === 'navigate') {
-              return caches.match('/index.html')
+              return caches.match('./index.html')
             }
           })
       })

@@ -53,28 +53,27 @@ npm run build
 npm run preview
 ```
 
-## 🚀 Deployment op Bolt.new
+## 🚀 Deployment
 
-De app is volledig geoptimaliseerd voor Bolt.new hosting:
+De app is geoptimaliseerd voor moderne hosting platforms:
 
-### Automatische Deployment
-- ✅ Build wordt automatisch uitgevoerd (`npm run build`)
-- ✅ Output naar `dist/` directory
-- ✅ Alle assets geoptimaliseerd voor productie
-- ✅ PWA functionaliteit volledig ondersteund
+### Build Process
+```bash
+npm run build
+```
 
 ### Environment Variables
-Zorg dat deze variabelen zijn ingesteld in je Bolt.new project:
+Zorg dat deze variabelen zijn ingesteld:
 ```
 VITE_SUPABASE_URL=your_supabase_project_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-### Build Optimalisaties
-- Code splitting voor betere performance
-- Minified assets
+### Production Features
+- Code splitting voor optimale performance
+- Minified en geoptimaliseerde assets
 - Service Worker voor offline functionaliteit
-- Optimized chunk sizes
+- PWA ondersteuning
 
 ## 🔐 Authentication
 
@@ -94,8 +93,8 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ## 🐛 Troubleshooting
 
 **Auth errors:**
-- Check `.env` variabelen
-- Verifieer Supabase Auth → URL Configuration
+- Controleer environment variabelen
+- Verifieer Supabase Auth configuratie
 
 **RLS errors:**
 - Zorg dat gebruiker is ingelogd
@@ -104,11 +103,6 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 **Build errors:**
 - Run `npm audit` voor security issues
 - Check TypeScript errors met `npm run lint`
-
-**Bolt.new specifiek:**
-- Zorg dat environment variables correct zijn ingesteld
-- Check browser console voor service worker errors
-- Verifieer dat alle assets correct laden
 
 ## 🎯 Roadmap
 

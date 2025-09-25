@@ -5,28 +5,20 @@ export default defineConfig({
   plugins: [react()],
   build: {
     outDir: 'dist',
-    assetsDir: '.',
+    assetsDir: 'assets',
     sourcemap: false,
-    minify: 'esbuild',
+    minify: true,
     rollupOptions: {
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom', 'react-router-dom'],
           supabase: ['@supabase/supabase-js']
         },
-        assetFileNames: '[name].[ext]',
-        chunkFileNames: '[name].js',
-        entryFileNames: '[name].js'
+        assetFileNames: 'assets/[name]-[hash][extname]',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js'
       },
     },
   },
-  base: '/',
-  server: {
-    port: 5173,
-    host: true
-  },
-  preview: {
-    port: 4173,
-    host: true
-  }
+  base: './'
 })

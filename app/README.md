@@ -31,9 +31,9 @@ npm run build
 ```
 De build staat in `dist`.
 
-## Deploy (Bolt Hosting)
+## Deploy
 1) Build het project: `npm run build`
-2) Deploy de `dist` folder naar Bolt Hosting
+2) Deploy de `dist` folder naar je hosting provider
 3) Zorg dat environment variables zijn ingesteld: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`
 
 ## PWA
@@ -42,6 +42,6 @@ De build staat in `dist`.
 - Installable en basic offline caching (app shell)
 
 ## Troubleshooting  
-- Auth errors: check `.env` en environment variables, en Supabase Auth → URL Configuration (site URL = deployed URL)
+- Auth errors: check environment variables en Supabase Auth configuratie
 - RLS errors: zorg dat `user_id` wordt meegestuurd (zie repositories voor voorbeelden)
 - Vulnerabilities: `npm audit` (let op: sommige fixes vereisen major upgrades)
