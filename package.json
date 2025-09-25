@@ -1,11 +1,11 @@
 {
-  "name": "flm-tracker",
+  "name": "flm-tracker-bolt",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",

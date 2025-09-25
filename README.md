@@ -1,6 +1,6 @@
 # FLM Tracker
 
-Een Progressive Web App (PWA) gebouwd met Vite + React + TypeScript + Supabase voor persoonlijke ontwikkeling en habit tracking.
+Een Progressive Web App (PWA) gebouwd met Vite + React + TypeScript + Supabase voor persoonlijke ontwikkeling en habit tracking, geoptimaliseerd voor Bolt.new hosting.
 
 ## 🚀 Modules
 
@@ -53,14 +53,28 @@ npm run build
 npm run preview
 ```
 
-## 🚀 Deployment (Bolt Hosting)
+## 🚀 Deployment op Bolt.new
 
-De app is geoptimaliseerd voor Bolt Hosting:
+De app is volledig geoptimaliseerd voor Bolt.new hosting:
 
-1. Build wordt automatisch gegenereerd naar `dist/`
-2. Alle paths zijn relatief (`./`) voor correcte routing
-3. PWA manifest en service worker zijn geconfigureerd
-4. Environment variables worden automatisch ingeladen
+### Automatische Deployment
+- ✅ Build wordt automatisch uitgevoerd (`npm run build`)
+- ✅ Output naar `dist/` directory
+- ✅ Alle assets geoptimaliseerd voor productie
+- ✅ PWA functionaliteit volledig ondersteund
+
+### Environment Variables
+Zorg dat deze variabelen zijn ingesteld in je Bolt.new project:
+```
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+### Build Optimalisaties
+- Code splitting voor betere performance
+- Minified assets
+- Service Worker voor offline functionaliteit
+- Optimized chunk sizes
 
 ## 🔐 Authentication
 
@@ -90,6 +104,11 @@ De app is geoptimaliseerd voor Bolt Hosting:
 **Build errors:**
 - Run `npm audit` voor security issues
 - Check TypeScript errors met `npm run lint`
+
+**Bolt.new specifiek:**
+- Zorg dat environment variables correct zijn ingesteld
+- Check browser console voor service worker errors
+- Verifieer dat alle assets correct laden
 
 ## 🎯 Roadmap
 

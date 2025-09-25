@@ -1,33 +1,71 @@
-const CACHE = 'flm-cache-v1'
-const APP_SHELL = ['./', './index.html', './src/main.tsx']
+const CACHE_NAME = 'flm-cache-v2'
+const APP_SHELL = [
+  '/',
+  '/index.html',
+  '/manifest.webmanifest',
+  '/flm-logo.svg'
+]
 
 self.addEventListener('install', (event) => {
+  console.log('Service Worker installing...')
   event.waitUntil(
-    caches.open(CACHE).then((cache) => cache.addAll(APP_SHELL))
+    caches.open(CACHE_NAME)
+      .then((cache) => {
+        console.log('Caching app shell')
+        return cache.addAll(APP_SHELL)
+      })
+      .then(() => self.skipWaiting())
   )
 })
 
 self.addEventListener('activate', (event) => {
+  console.log('Service Worker activating...')
   event.waitUntil(
-    caches.keys().then((keys) => 
-      Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))
-    )
+    caches.keys()
+      .then((cacheNames) => {
+        return Promise.all(
+          cacheNames
+            .filter((cacheName) => cacheName !== CACHE_NAME)
+            .map((cacheName) => caches.delete(cacheName))
+        )
+      })
+      .then(() => self.clients.claim())
   )
 })
 
 self.addEventListener('fetch', (event) => {
-  const req = event.request
-  if (req.method !== 'GET') return
+  if (event.request.method !== 'GET') return
+  
+  // Skip cross-origin requests
+  if (!event.request.url.startsWith(self.location.origin)) return
   
   event.respondWith(
-    caches.match(req).then((cached) =>
-      cached || fetch(req).then((res) => {
-        if (res.status === 200) {
-          const copy = res.clone()
-          caches.open(CACHE).then((c) => c.put(req, copy))
+    caches.match(event.request)
+      .then((response) => {
+        if (response) {
+          return response
         }
-        return res
-      }).catch(() => caches.match('./index.html'))
-    )
+        
+        return fetch(event.request)
+          .then((response) => {
+            if (!response || response.status !== 200 || response.type !== 'basic') {
+              return response
+            }
+            
+            const responseToCache = response.clone()
+            caches.open(CACHE_NAME)
+              .then((cache) => {
+                cache.put(event.request, responseToCache)
+              })
+            
+            return response
+          })
+          .catch(() => {
+            // Fallback to index.html for navigation requests
+            if (event.request.mode === 'navigate') {
+              return caches.match('/index.html')
+            }
+          })
+      })
   )
 })
