@@ -32,9 +32,11 @@ npm run build
 De build staat in `dist`.
 
 ## Deploy
-1) Build het project: `npm run build`
-2) Deploy de `dist` folder naar je hosting provider
-3) Zorg dat environment variables zijn ingesteld: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`
+Geoptimaliseerd voor Bolt Hosting - deploy gebeurt automatisch via Bolt interface.
+
+Environment variables:
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY`
 
 ## PWA
 - Manifest: `public/manifest.webmanifest`

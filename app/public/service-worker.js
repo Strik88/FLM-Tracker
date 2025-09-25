@@ -20,7 +20,12 @@ self.addEventListener('fetch', (event) => {
         const copy = res.clone()
         caches.open(CACHE).then((c) => c.put(req, copy))
         return res
-      }).catch(() => caches.match('/index.html'))
+      }).catch(() => {
+        // Fallback to index.html for navigation requests
+        if (event.request.mode === 'navigate') {
+          return caches.match('/index.html')
+        }
+      })
     )
   )
 })
