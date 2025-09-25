@@ -55,7 +55,7 @@ npm run preview
 
 ## 🚀 Deployment
 
-De app is geoptimaliseerd voor Bolt Hosting:
+De app is geoptimaliseerd voor Bolt Hosting en andere moderne hosting platforms:
 
 ### Build Process
 ```bash
@@ -70,7 +70,7 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
 ### Production Features
-- Geoptimaliseerd voor Bolt Hosting
+- Geoptimaliseerd voor moderne hosting platforms
 - Code splitting en minified assets
 - PWA ondersteuning met offline functionaliteit
 

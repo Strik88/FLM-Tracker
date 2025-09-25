@@ -1,11 +1,18 @@
 const CACHE = 'flm-cache-v1'
-const APP_SHELL = ['./', './index.html']
+const APP_SHELL = [
+  './',
+  './index.html',
+  './manifest.webmanifest',
+  './flm-logo.svg'
+]
 
 self.addEventListener('install', (event) => {
+  console.log('Service Worker installing...')
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(APP_SHELL)))
 })
 
 self.addEventListener('activate', (event) => {
+  console.log('Service Worker activating...')
   event.waitUntil(
     caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
   )
@@ -23,7 +30,7 @@ self.addEventListener('fetch', (event) => {
       }).catch(() => {
         // Fallback to index.html for navigation requests
         if (event.request.mode === 'navigate') {
-          return caches.match('/index.html')
+          return caches.match('./index.html')
         }
       })
     )

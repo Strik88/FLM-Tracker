@@ -32,7 +32,7 @@ npm run build
 De build staat in `dist`.
 
 ## Deploy
-Geoptimaliseerd voor Bolt Hosting - deploy gebeurt automatisch via Bolt interface.
+Geoptimaliseerd voor moderne hosting platforms.
 
 Environment variables:
 - `VITE_SUPABASE_URL`
